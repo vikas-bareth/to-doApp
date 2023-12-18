@@ -3,22 +3,6 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from 'yup'
 const port = 4000;
-// const existingId = [];
-// var randomIDNum=0;
-// var arr = [];
-//     while(arr.length < 100){
-//         var r = Math.floor(Math.random() * 100) + 1;
-//         if(arr.indexOf(r) === -1) arr.push(r);
-//     }
-//     axios.get(`http://localhost:${port}/appointments`).then(response => {
-//         //creating an existing id array to assign unique id
-//         response.data.map(item => existingId.push(item.Id));
-//         var array3 = arr.filter(val => existingId.indexOf(val) === -1 );
-//         randomIDNum = array3[0];
-//         // console.log(randomIDNum)
-//     })
-
-
 const getCurrentDate = () => {
     const currentDate = new Date();
      // Get the day, attach with a leading zero if it's a single digit
@@ -41,14 +25,6 @@ export function ToDoApp(){
         .then(response=> {
             setAppointments(response.data);
             formik.values.Id= response.data.length+1;
-            // //making array of existing ids
-            // var ID = (response.data.map(val => val.Id));
-            // //filtering and incrementing 
-            // ID.filter(val => {
-            //     if (formik.values.Id === val) {
-            //         formik.values.Id++;
-            //     }
-            // })
         }).catch(error => {
             console.log(error.message);
         })
@@ -67,8 +43,6 @@ export function ToDoApp(){
             Description:yup.string().required("Description is required").max(150,"Description is too long")
         }),
         onSubmit: (appointment) => {
-            console.log(appointment)
-
             axios.post(`http://localhost:${port}/addtask`,appointment);
             alert('Appointment Added Successfully...');
             window.location.reload()
@@ -78,8 +52,7 @@ export function ToDoApp(){
         initialValues: {
             Id:editAppoint[0].Id,
             Title:editAppoint[0].Title,
-              Date: `${editAppoint[0].Date.toString().slice(0,editAppoint[0].Date.toString().indexOf("T"))}`,
-            // Date:editAppoint[0].Date,
+            Date: `${editAppoint[0].Date.toString().slice(0,editAppoint[0].Date.toString().indexOf("T"))}`,
             Description:editAppoint[0].Description
         },
         enableReinitialize:true, // to allow modifying in form we have to set it to true
@@ -93,7 +66,6 @@ export function ToDoApp(){
     
     function handleDeleteClick(e){
         const id = parseInt(e.target.value);
-        console.log(id)
         const flag = window.confirm(`Are you sure \n Want to Delete`);
         if(flag){
             axios.delete(`http://localhost:${port}/deletetask/${id}`)
@@ -118,6 +90,7 @@ export function ToDoApp(){
 
     useEffect(()=>{
         LoadAppointments();
+        //eslint-disable-next-line
     },[]);
     return(
         <div className="container-fluid mt-4">
