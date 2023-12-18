@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from 'yup'
+import './todo.css'
 const port = 4000;
 const getCurrentDate = () => {
     const currentDate = new Date();
@@ -19,7 +20,6 @@ export function ToDoApp(){
     const [toggleAdd,setToggleAdd] = useState({display:'block'});
     const [toggleEdit,setToggleEdit] = useState({display:'none'});
     const [editAppoint,setEditAppointment] = useState([{Id:0,Title:'',Date:new Date(),Description:''}]);
-
     function LoadAppointments(){
         axios.get(`http://localhost:${port}/appointments`)
         .then(response=> {
@@ -93,10 +93,11 @@ export function ToDoApp(){
         //eslint-disable-next-line
     },[]);
     return(
-        <div className="container-fluid mt-4">
-            <h1 className="text-center">To Do List App</h1>
+        <div className="container-fluid to-do">
+            <nav className="nav bg-primary mb-4 text-white d-flex justify-content-center align-items-center p-2" style={{marginLeft:'-20px',marginRight:'-20px'}}><h1 className="text-center">To Do App</h1></nav>
+            
             <div className="row gy-5">
-            <header className="col-3">
+            <header className="col-sm-12 col-md-3">
 
                 <div aria-label="AddAppointment" style={toggleAdd}>
                 <label htmlFor="" className="form-label fw-bold">Add New Appointments</label>
@@ -153,13 +154,13 @@ export function ToDoApp(){
                 </div>
 
             </header>
-            <main className="col-9">
+            <main className="col-sm-12 col-md-9">
                 <div>
                     <label htmlFor="" className="form-label fw-bold">Your Appointments</label>
                     <div className="d-flex flex-wrap">
                         {
                             appointments.map(appointment => 
-                                <div className="alert alert-dismissible alert-primary m-2 w-25" key={appointment.Id}>
+                                <div className="alert alert-dismissible alert-primary m-2" key={appointment.Id} id="taskMainContainer">
                                     <button className="btn btn-close" onClick={handleDeleteClick} value={appointment.Id}></button>
                                     <div className="h5 alert-title">{appointment.Title}</div>
                                     <p>{appointment.Description}</p>

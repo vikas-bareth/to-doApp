@@ -1,0 +1,12 @@
+@media only screen and (max-width: 767px) {
+    #taskMainContainer{
+        width: 100vw;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    
+    #taskMainContainer{
+        width: 20em;
+    }
+  }
