@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
+import * as yup from 'yup'
 const port = 4000;
 // const existingId = [];
 // var randomIDNum=0;
@@ -16,6 +17,18 @@ const port = 4000;
 //         randomIDNum = array3[0];
 //         // console.log(randomIDNum)
 //     })
+
+
+const getCurrentDate = () => {
+    const currentDate = new Date();
+     // Get the day, attach with a leading zero if it's a single digit
+    const day = String(currentDate.getDate()).padStart(2, '0');
+     // Get the month, add 1 cause months are zero base & attach with a leading zero if it's a single digit
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    //get the year
+    const year = currentDate.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
 
 export function ToDoApp(){
     const [appointments, setAppointments] = useState([]);
@@ -45,8 +58,14 @@ export function ToDoApp(){
             Id:1,
             Title:'',
             Description:'',
-            Date: new Date()
+            Date: getCurrentDate().toString()
         },
+        validationSchema: yup.object({
+            Id:yup.number().required("Id is Required"),
+            Title:yup.string().required("Title is Required").min(2,'Title too short').max(25,'Title too long'),
+            Date:yup.date().required("Date is Required").min(getCurrentDate(),"Date can't be past dates"),
+            Description:yup.string().required("Description is required").max(150,"Description is too long")
+        }),
         onSubmit: (appointment) => {
             console.log(appointment)
 
@@ -55,7 +74,6 @@ export function ToDoApp(){
             window.location.reload()
         }
     })
-
     const editFormik = useFormik({
         initialValues: {
             Id:editAppoint[0].Id,
@@ -112,19 +130,22 @@ export function ToDoApp(){
                    <div>
                     <form action="" onSubmit={formik.handleSubmit}>
                         <div className="d-flex mb-3">  
-                            <input type="hidden" name="Id" onChange={formik.handleChange} value={formik.values.Id}   />
+                            <input type="hidden" name="Id" onChange={formik.handleChange} value={formik.values.Id} {...formik.getFieldProps('Id')}  />
                             <div className="form-floating me-2 w-100">
-                                <input type="text" className="form-control" id="floatingTitle" placeholder="Title" name="Title" onChange={formik.handleChange} />
+                                <input type="text" className="form-control" id="floatingTitle" placeholder="Title" name="Title" onChange={formik.handleChange} {...formik.getFieldProps('Title')} />
                                 <label htmlFor="floatingTitle">Title</label>
+                                <p className="text-danger">{formik.errors.Title}</p>
                             </div>
                             <div className="form-floating w-100">
-                                <input type="date" className="form-control" id="floatingDate" placeholder="Date" name="Date" onChange={formik.handleChange} />
+                                <input type="date" className="form-control" id="floatingDate" placeholder="Date" name="Date" onChange={formik.handleChange} {...formik.getFieldProps('Date')} value={formik.values.Date}/>
                                 <label htmlFor="floatingDate">Date</label>
-                            </div>
+                                <p className="text-danger">{formik.errors.Date}</p>
+                            </div>  
                         </div>
                         <div className="mb-3">
                             <label htmlFor="inputDescription" className="form-label fw-bold">Description</label>
-                            <textarea className="form-control" id="inputDescription" rows="3" name="Description" onChange={formik.handleChange}></textarea>
+                            <textarea className="form-control" id="inputDescription" rows="3" name="Description" onChange={formik.handleChange} {...formik.getFieldProps('Description')}></textarea>
+                            <p className="text-danger">{formik.errors.Description}</p>
                         </div>
                         <button className="btn btn-primary p-2 w-25">Add +</button>
                     </form>
@@ -151,7 +172,8 @@ export function ToDoApp(){
                             <label htmlFor="inputDescription" className="form-label fw-bold">Description</label>
                             <textarea className="form-control" id="inputDescription" rows="3" name="Description" onChange={editFormik.handleChange} value={editFormik.values.Description}></textarea>
                         </div>
-                        <button className="btn btn-success p-2 me-2">Save</button>
+                        
+                        {editFormik.dirty && <button className="btn btn-success p-2 me-2">Save</button>}
                         <button type="button" className="btn btn-danger p-2" onClick={handleCancelClick}>Cancel</button>
                     </form>
                    </div>
