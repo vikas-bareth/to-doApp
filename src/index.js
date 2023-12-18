@@ -10,9 +10,9 @@ import { ToDoApp } from './components/to-do/todo.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <ToDoApp />
-  </React.StrictMode>
+    <React.StrictMode>
+        <ToDoApp />
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

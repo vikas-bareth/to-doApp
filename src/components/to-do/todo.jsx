@@ -2,21 +2,54 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 const port = 4000;
-
+// const existingId = [];
+// var randomIDNum=0;
+// var arr = [];
+//     while(arr.length < 100){
+//         var r = Math.floor(Math.random() * 100) + 1;
+//         if(arr.indexOf(r) === -1) arr.push(r);
+//     }
+//     axios.get(`http://localhost:${port}/appointments`).then(response => {
+//         //creating an existing id array to assign unique id
+//         response.data.map(item => existingId.push(item.Id));
+//         var array3 = arr.filter(val => existingId.indexOf(val) === -1 );
+//         randomIDNum = array3[0];
+//         // console.log(randomIDNum)
+//     })
 
 export function ToDoApp(){
     const [appointments, setAppointments] = useState([]);
     const [toggleAdd,setToggleAdd] = useState({display:'block'});
     const [toggleEdit,setToggleEdit] = useState({display:'none'});
     const [editAppoint,setEditAppointment] = useState([{Id:0,Title:'',Date:new Date(),Description:''}]);
+
+    function LoadAppointments(){
+        axios.get(`http://localhost:${port}/appointments`)
+        .then(response=> {
+            setAppointments(response.data);
+            formik.values.Id= response.data.length+1;
+            // //making array of existing ids
+            // var ID = (response.data.map(val => val.Id));
+            // //filtering and incrementing 
+            // ID.filter(val => {
+            //     if (formik.values.Id === val) {
+            //         formik.values.Id++;
+            //     }
+            // })
+        }).catch(error => {
+            console.log(error.message);
+        })
+    }
     const formik = useFormik({
         initialValues:{
-            Id:0,
+            Id:1,
             Title:'',
             Description:'',
             Date: new Date()
         },
         onSubmit: (appointment) => {
+            console.log(appointment)
+
             axios.post(`http://localhost:${port}/addtask`,appointment);
             alert('Appointment Added Successfully...');
             window.location.reload()
@@ -39,13 +72,7 @@ export function ToDoApp(){
         }
 
     })
-
-    function LoadAppointments(){
-        axios.get(`http://localhost:${port}/appointments`)
-        .then(response=> {
-            setAppointments(response.data);
-        })
-    }
+    
     function handleDeleteClick(e){
         const id = parseInt(e.target.value);
         console.log(id)
@@ -85,14 +112,7 @@ export function ToDoApp(){
                    <div>
                     <form action="" onSubmit={formik.handleSubmit}>
                         <div className="d-flex mb-3">  
-                            <div className="form-floating me-2 w-50">
-                                <input type="number" className="form-control" id="floatingInputID" placeholder="Id" name="Id" onChange={formik.handleChange} value={formik.values.Id}   />
-                                <label htmlFor="floatingInputID">ID</label>
-                            </div>
-                            
-                            {/* <input type="number" name="Id" onChange={formik.handleChange} value={Math.floor(Math.random() * 10)}   /> */}
-
-
+                            <input type="hidden" name="Id" onChange={formik.handleChange} value={formik.values.Id}   />
                             <div className="form-floating me-2 w-100">
                                 <input type="text" className="form-control" id="floatingTitle" placeholder="Title" name="Title" onChange={formik.handleChange} />
                                 <label htmlFor="floatingTitle">Title</label>
@@ -117,10 +137,7 @@ export function ToDoApp(){
                    <div>
                     <form action="" onSubmit={editFormik.handleSubmit}>
                         <div className="d-flex mb-3">  
-                            <div className="form-floating me-2 w-50">
-                                <input type="number" className="form-control" id="floatingInputID" placeholder="Id" name="Id" onChange={editFormik.handleChange} value={editFormik.values.Id}       />
-                                <label htmlFor="floatingInputID">ID</label>
-                            </div>
+                                <input type="hidden" name="Id" onChange={editFormik.handleChange} value={editFormik.values.Id}       />
                             <div className="form-floating me-2 w-100">
                                 <input type="text" className="form-control" id="floatingTitle" placeholder="Title" name="Title" onChange={editFormik.handleChange} value={editFormik.values.Title}/>
                                 <label htmlFor="floatingTitle">Title</label>
