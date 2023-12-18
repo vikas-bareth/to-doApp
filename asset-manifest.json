@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/vikas-bareth/to-doApp/static/css/main.ba841c47.css",
+    "main.js": "/vikas-bareth/to-doApp/static/js/main.ea604711.js",
+    "static/js/787.ef22139f.chunk.js": "/vikas-bareth/to-doApp/static/js/787.ef22139f.chunk.js",
+    "static/media/bootstrap-icons.woff?": "/vikas-bareth/to-doApp/static/media/bootstrap-icons.66b7720f4a230f1b0341.woff",
+    "static/media/bootstrap-icons.woff2?": "/vikas-bareth/to-doApp/static/media/bootstrap-icons.64ed46b247405068ca60.woff2",
+    "index.html": "/vikas-bareth/to-doApp/index.html",
+    "main.ba841c47.css.map": "/vikas-bareth/to-doApp/static/css/main.ba841c47.css.map",
+    "main.ea604711.js.map": "/vikas-bareth/to-doApp/static/js/main.ea604711.js.map",
+    "787.ef22139f.chunk.js.map": "/vikas-bareth/to-doApp/static/js/787.ef22139f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ba841c47.css",
+    "static/js/main.ea604711.js"
+  ]
+}
